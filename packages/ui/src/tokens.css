@@ -1,0 +1,90 @@
+/**
+ * TuitionTruth design tokens — "The Modern Registrar's Ledger".
+ * Single source of truth for color. Components reference these variables;
+ * raw hex in component code is banned by the design-token discipline baseline.
+ *
+ * Light and dark are authored together (dark uses desaturated tonal variants,
+ * not naive inversion) and each pair is verified for WCAG AA contrast.
+ */
+
+:root {
+  /* Core surfaces & ink */
+  --color-ink: #152a4a; /* foreground, headings — deep institutional ink */
+  --color-paper: #fafbf9; /* warm document white, not sterile gray */
+  --color-muted: #e8ece9; /* card borders, dividers, skeleton base */
+  --color-border: #dbe1e6;
+
+  /* Interactive */
+  --color-primary: #1e40af;
+  --color-on-primary: #ffffff;
+
+  /* Directional semantics — never used without an accompanying icon + text */
+  --color-rising: #b45309; /* tuition increases: amber, urgent not alarmist */
+  --color-falling: #0f766e; /* decreases / flat: teal (colorblind-safe) */
+
+  /* Status */
+  --color-destructive: #dc2626;
+  --color-ring: #1e40af;
+
+  /* Type roles (wired to next/font CSS variables in apps/web) */
+  --font-display: var(--font-plex-serif), Georgia, serif;
+  --font-body: var(--font-plex-sans), system-ui, sans-serif;
+  --font-data: var(--font-plex-mono), ui-monospace, monospace;
+
+  /* Motion tokens — one rhythm across the whole app */
+  --duration-micro: 150ms;
+  --duration-transition: 300ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Dashboard-density spacing scale (§3.1) */
+  --space-1: 0.5rem; /* 8px  */
+  --space-2: 0.75rem; /* 12px */
+  --space-3: 1rem; /* 16px */
+  --space-4: 1.5rem; /* 24px */
+  --space-5: 2rem; /* 32px */
+  --space-6: 3rem; /* 48px */
+
+  --radius: 0.5rem;
+  --content-max: 1320px;
+}
+
+:root[data-theme="dark"] {
+  --color-ink: #e8eef7;
+  --color-paper: #0d1b2e;
+  --color-muted: #1c2c44;
+  --color-border: #26374f;
+
+  --color-primary: #7aa2f7;
+  --color-on-primary: #0d1b2e;
+
+  --color-rising: #eab061;
+  --color-falling: #4fd1c5;
+
+  --color-destructive: #f87171;
+  --color-ring: #7aa2f7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-ink: #e8eef7;
+    --color-paper: #0d1b2e;
+    --color-muted: #1c2c44;
+    --color-border: #26374f;
+
+    --color-primary: #7aa2f7;
+    --color-on-primary: #0d1b2e;
+
+    --color-rising: #eab061;
+    --color-falling: #4fd1c5;
+
+    --color-destructive: #f87171;
+    --color-ring: #7aa2f7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-micro: 0ms;
+    --duration-transition: 0ms;
+  }
+}
