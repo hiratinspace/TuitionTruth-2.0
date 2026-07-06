@@ -3,6 +3,7 @@ import { cn } from "../primitives/cn";
 import {
   axisTicks,
   buildLineSegments,
+  DEFAULT_INSETS,
   padDomain,
   scalePoints,
   valueDomain,
@@ -28,7 +29,7 @@ export interface TrendChartProps {
   readonly ariaLabel?: string;
 }
 
-const INSETS = { top: 12, right: 16, bottom: 28, left: 64 };
+const INSETS = DEFAULT_INSETS;
 
 const STROKE: Record<TrendSeries["variant"], string> = {
   sticker: "var(--color-ink)",

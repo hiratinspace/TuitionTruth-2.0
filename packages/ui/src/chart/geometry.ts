@@ -28,6 +28,10 @@ export interface PlotArea {
   readonly insets: Insets;
 }
 
+/** Default plot insets — shared by the static and interactive charts so their
+ * coordinate systems align exactly (the overlay maps pointer → data). */
+export const DEFAULT_INSETS: Insets = { top: 12, right: 16, bottom: 28, left: 64 };
+
 /** A [min, max] domain; `padDomain` widens a value domain for headroom. */
 export type Domain = readonly [number, number];
 

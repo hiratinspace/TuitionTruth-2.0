@@ -52,3 +52,7 @@ export {
   axisTicks,
 } from "./chart/geometry";
 export { TrendChart, type TrendChartProps, type TrendSeries } from "./chart/TrendChart";
+export { TrendChartInteractive } from "./chart/TrendChartInteractive";
+
+export { CountUp, type CountUpProps } from "./motion/CountUp";
+export { clamp01, easeOutCubic, countUpValue } from "./motion/easing";

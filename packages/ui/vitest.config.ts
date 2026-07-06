@@ -7,7 +7,9 @@ import { defineConfig } from "vitest/config";
  */
 export default defineConfig({
   test: {
+    // Default to node for the pure-logic tests; the component a11y tests opt
+    // into jsdom per-file via `// @vitest-environment jsdom`.
     environment: "node",
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
   },
 });
