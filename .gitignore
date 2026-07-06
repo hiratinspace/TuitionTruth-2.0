@@ -71,3 +71,8 @@ $RECYCLE.BIN/
 tmp/
 .cache/
 *.tgz
+
+# Internal planning / process docs — not part of the shipped product
+docs/BUILD_PLAN.md
+/tuition-tracker-linear-backlog.md
+/tuition-tracker-scoping-analysis.md
