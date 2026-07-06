@@ -8,7 +8,11 @@ import Link from "next/link";
  */
 export default function HomePage() {
   return (
-    <main className="mx-auto flex min-h-dvh max-w-content flex-col justify-between px-6 py-10 md:px-10">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="mx-auto flex min-h-dvh max-w-content flex-col justify-between px-6 py-10 md:px-10"
+    >
       <header className="flex items-center justify-between">
         <span className="font-display text-lg font-semibold text-ink">TuitionTruth</span>
         <nav className="flex items-center gap-4">

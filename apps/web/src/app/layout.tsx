@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import type { ReactNode } from "react";
+import { env } from "@/env";
 import "@tuitiontruth/ui/tokens.css";
 import "./globals.css";
 
@@ -28,15 +29,37 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TuitionTruth — what a degree actually costs",
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  title: {
+    default: "TuitionTruth — what a degree actually costs",
+    template: "%s | TuitionTruth",
+  },
   description:
     "Track real college tuition, net price after aid, and how fast the number is rising. Every figure sourced and dated.",
+  applicationName: "TuitionTruth",
+  openGraph: {
+    type: "website",
+    siteName: "TuitionTruth",
+    title: "TuitionTruth — what a degree actually costs",
+    description:
+      "Track real college tuition, net price after aid, and how fast the number is rising. Every figure sourced and dated.",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${plexSans.variable} ${plexSerif.variable} ${plexMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        {/* Skip link — first focusable element, visually hidden until focused. */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[var(--radius)] focus:bg-primary focus:px-4 focus:py-2 focus:font-body focus:text-sm focus:text-on-primary"
+        >
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

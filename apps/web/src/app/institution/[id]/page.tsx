@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   Card,
+  CountUp,
   ProvenanceChip,
-  TrendChart,
+  TrendChartInteractive,
   formatCurrency,
   type TrendSeries,
 } from "@tuitiontruth/ui";
@@ -17,6 +18,7 @@ import {
 import { BigFive } from "@/components/BigFive";
 import { Disclaimer } from "@/components/Disclaimer";
 import { ExportButton } from "@/components/ExportButton";
+import { InstitutionJsonLd } from "@/components/InstitutionJsonLd";
 import { MetricNumber } from "@/components/MetricNumber";
 import { ResidencyToggle } from "@/components/ResidencyToggle";
 
@@ -110,9 +112,12 @@ export default async function InstitutionPage({
   }
   const institution = institutionResult.data;
   const analytics = analyticsResult.ok ? analyticsResult.data : null;
+  const netPrice =
+    analytics?.metrics.latestNet.status === "ok" ? analytics.metrics.latestNet.value : null;
 
   return (
-    <main className="mx-auto max-w-content px-6 py-10 md:px-10">
+    <main id="main-content" tabIndex={-1} className="mx-auto max-w-content px-6 py-10 md:px-10">
+      <InstitutionJsonLd institution={institution} netPrice={netPrice} />
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
@@ -159,7 +164,7 @@ export default async function InstitutionPage({
               <div className="mt-2 font-data text-[56px] font-medium leading-none tabular-nums text-ink">
                 <MetricNumber
                   metric={analytics.metrics.latestNet}
-                  render={(value) => formatCurrency(value)}
+                  render={(value) => <CountUp value={value} format={(n) => formatCurrency(n)} />}
                 />
               </div>
               <div className="mt-2 font-body text-sm text-ink/60">
@@ -192,7 +197,7 @@ export default async function InstitutionPage({
                   </span>
                 </span>
               </div>
-              <TrendChart
+              <TrendChartInteractive
                 series={toTrendSeries(analytics)}
                 ariaLabel={`Tuition and net-price trend for ${institution.name}`}
               />

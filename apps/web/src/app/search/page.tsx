@@ -52,7 +52,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Searc
   const result = hasCriteria ? await searchInstitutions(query) : null;
 
   return (
-    <main className="mx-auto max-w-content px-6 py-10 md:px-10">
+    <main id="main-content" tabIndex={-1} className="mx-auto max-w-content px-6 py-10 md:px-10">
       <h1 className="font-display text-3xl font-semibold text-ink md:text-4xl">
         Find an institution
       </h1>
