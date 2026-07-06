@@ -1,0 +1,15 @@
+# Dependencies & build artifacts
+node_modules/
+.next/
+dist/
+coverage/
+.turbo/
+pnpm-lock.yaml
+
+# Tool-managed / generated — never hand-format
+**/migrations/meta/
+.claude/
+
+# User-provided source documents — preserve as authored
+tuition-tracker-linear-backlog.md
+tuition-tracker-scoping-analysis.md

@@ -1,0 +1,44 @@
+# Local development infrastructure for TuitionTruth 2.0.
+# Provides a Postgres 16 system-of-record and a Redis cache so migrations
+# (TUIT-2) and the caching layers (TUIT-12 / TUIT-28) can be exercised locally
+# without any cloud credentials.
+#
+#   docker compose up -d
+#   pnpm db:migrate
+#
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tuitiontruth-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tuitiontruth
+      POSTGRES_PASSWORD: tuitiontruth
+      POSTGRES_DB: tuitiontruth
+    ports:
+      - "5432:5432"
+    volumes:
+      - tuitiontruth-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tuitiontruth -d tuitiontruth"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: tuitiontruth-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - tuitiontruth-redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  tuitiontruth-pgdata:
+  tuitiontruth-redisdata:

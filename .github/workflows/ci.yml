@@ -1,0 +1,129 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── TypeScript workspace: format, typecheck, lint, test, build ──────────────
+  web:
+    name: Web / packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prettier check
+        run: pnpm format:check
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Migration drift check
+        run: pnpm db:check
+
+      - name: Build
+        # The web app now imports @tuitiontruth/db (server-side /api/v1 routes),
+        # whose env validation requires DATABASE_URL at build time — consistent
+        # with TUIT-1's "build fails on missing secrets". The build never opens a
+        # connection (postgres.js is lazy), so a placeholder URL is sufficient
+        # here; real deployments inject the actual secret.
+        env:
+          DATABASE_URL: postgresql://build:build@localhost:5432/build
+        run: pnpm build
+
+  # ── Migration reversibility: apply up, roll back, re-apply (TUIT-2) ─────────
+  migrations:
+    name: Migration reversibility
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: tuitiontruth
+          POSTGRES_PASSWORD: tuitiontruth
+          POSTGRES_DB: tuitiontruth_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tuitiontruth -d tuitiontruth_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://tuitiontruth:tuitiontruth@localhost:5432/tuitiontruth_ci
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply migrations (up)
+        run: pnpm db:migrate
+
+      - name: Roll back latest migration (down)
+        run: pnpm db:rollback
+
+      - name: Re-apply migrations (up again — proves no data-loss drift)
+        run: pnpm db:migrate
+
+      - name: Integration tests (constraints, audit trail, view, query performance)
+        run: pnpm --filter @tuitiontruth/db test:integration
+
+  # ── Python ingestion service: lint + strict types ──────────────────────────
+  pipeline:
+    name: Pipeline (Python)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/pipeline
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv pip install --system -e ".[dev]"
+
+      - name: Ruff (lint + format check)
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Mypy (strict)
+        run: mypy src

@@ -1,0 +1,30 @@
+{
+  "name": "tuitiontruth",
+  "version": "0.0.0",
+  "private": true,
+  "description": "TuitionTruth 2.0 — college tuition tracking and inflation analysis platform",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,mjs,md,json,css,yaml,yml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mjs,md,json,css,yaml,yml}\"",
+    "db:generate": "pnpm --filter @tuitiontruth/db generate",
+    "db:migrate": "pnpm --filter @tuitiontruth/db migrate",
+    "db:rollback": "pnpm --filter @tuitiontruth/db rollback",
+    "db:check": "pnpm --filter @tuitiontruth/db check",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  }
+}
