@@ -8,16 +8,23 @@ out/
 dist/
 build/
 .turbo/
+storybook-static/
 
-# Testing
+# Testing / coverage
 coverage/
 *.tsbuildinfo
+# Playwright / e2e (apps/pipeline scraping, future web e2e)
+playwright-report/
+blob-report/
+test-results/
+.playwright/
 
 # Environment — never commit secrets (TUIT-1)
 .env
 .env.local
 .env.*.local
 !.env.example
+*.pem
 
 # Python (apps/pipeline)
 __pycache__/
@@ -27,10 +34,40 @@ venv/
 .mypy_cache/
 .ruff_cache/
 .pytest_cache/
+.tox/
+*.egg-info/
+.eggs/
+.python-version
+
+# Local services (docker-compose)
+dump.rdb
+
+# Deploy
+.vercel
+.netlify
+
+# Logs
+*.log
+logs/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Editor / OS
 .DS_Store
 .idea/
 .vscode/*
 !.vscode/extensions.json
-*.log
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Claude Code — local machine settings (shared config may be committed)
+.claude/settings.local.json
+
+# Misc
+tmp/
+.cache/
+*.tgz
