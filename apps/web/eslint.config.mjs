@@ -3,9 +3,10 @@ import next from "@tuitiontruth/config/eslint/next";
 export default [
   ...next,
   {
-    // API route handlers and server-only modules are the sanctioned place to
-    // reach the database; the import ban applies only to the client layer.
-    files: ["src/app/api/**/*.ts", "src/server/**/*.ts"],
+    // API route handlers, server-only modules, and tooling scripts are the
+    // sanctioned places to reach the database; the ban applies only to the
+    // client layer.
+    files: ["src/app/api/**/*.ts", "src/server/**/*.ts", "scripts/**/*.ts"],
     rules: {
       "no-restricted-imports": "off",
     },

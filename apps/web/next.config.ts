@@ -1,4 +1,6 @@
 import type { NextConfig } from "next";
+// Load the shared monorepo-root .env BEFORE env validation runs.
+import "./load-env";
 // Validate environment at build time — fail fast on misconfiguration.
 import "./src/env";
 

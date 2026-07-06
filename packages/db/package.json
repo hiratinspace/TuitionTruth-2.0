@@ -9,9 +9,9 @@
   },
   "scripts": {
     "generate": "drizzle-kit generate",
-    "migrate": "tsx src/migrate.ts",
-    "rollback": "tsx src/rollback.ts",
-    "seed": "tsx src/seed.ts",
+    "migrate": "tsx --env-file-if-exists=../../.env src/migrate.ts",
+    "rollback": "tsx --env-file-if-exists=../../.env src/rollback.ts",
+    "seed": "tsx --env-file-if-exists=../../.env src/seed.ts",
     "check": "drizzle-kit check",
     "studio": "drizzle-kit studio",
     "lint": "eslint .",

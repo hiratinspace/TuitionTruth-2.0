@@ -2,7 +2,7 @@
 
 College tuition tracking and inflation analysis. **What will this degree actually cost me, and how fast is that number rising?**
 
-Every number the platform displays carries visible provenance — source, timestamp, confidence. See [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md) for the full architecture and phased roadmap.
+Every number the platform displays carries visible provenance — source, timestamp, confidence. Architecture decisions are recorded in [`docs/decisions/`](docs/decisions).
 
 ## Monorepo layout
 
@@ -19,7 +19,7 @@ Data flows one direction: **pipeline → db → analytics API → UI**. UI never
 
 ## Prerequisites
 
-- **Node** ≥ 20.11 (`.nvmrc` pins the dev version)
+- **Node** ≥ 22.13 (`.nvmrc` pins the dev version)
 - **pnpm** ≥ 9 — `corepack enable && corepack prepare pnpm@9.15.0 --activate`
 - **Docker** (for the local Postgres + Redis, optional but recommended)
 - **Python** 3.12 (for `apps/pipeline`)
@@ -27,12 +27,24 @@ Data flows one direction: **pipeline → db → analytics API → UI**. UI never
 ## Getting started
 
 ```bash
-pnpm install               # install all workspace dependencies
-cp .env.example .env        # fill in real values
-docker compose up -d        # start local Postgres + Redis
-pnpm db:migrate             # apply migrations
-pnpm dev                    # run the web app at http://localhost:3000
+pnpm install                              # install all workspace dependencies
+cp .env.example .env                       # local defaults already point at docker compose
+docker compose up -d                       # start local Postgres + Redis
+pnpm db:migrate                            # apply migrations
+pnpm --filter @tuitiontruth/web seed:dev   # load demo institutions + tuition history + snapshots
+pnpm --filter @tuitiontruth/web dev        # run the web app at http://localhost:3000
 ```
+
+Then open <http://localhost:3000>, search for a college (e.g. "university"), and open its profile
+to see net price, the cost trend, and the projected total.
+
+The root `.env` is shared by the database package, the pipeline, and the web app; every command
+above loads it automatically (the web app via `next.config.ts`, the CLI scripts via
+`--env-file-if-exists`), so no manual `export` is needed.
+
+> **Demo vs. real data.** `seed:dev` inserts a hand-curated sample so the app runs without API keys.
+> Production data comes from `apps/pipeline` (College Scorecard + IPEDS + scraped current-year
+> prices); set `COLLEGE_SCORECARD_API_KEY` in `.env` to run live ingestion.
 
 ## Common commands
 
