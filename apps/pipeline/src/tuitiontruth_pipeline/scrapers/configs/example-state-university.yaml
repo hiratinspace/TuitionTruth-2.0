@@ -1,0 +1,16 @@
+# Sample scraper config (TUIT-14). Real batch configs replace the example host
+# and selectors with the institution's actual bursar page markup.
+ipeds_unit_id: 100001
+name: Example State University
+url: https://bursar.example-state.edu/tuition-and-fees
+academic_year: 2025
+respect_robots: true
+tuition_in_state:
+  type: css
+  expr: "#tuition-in-state .amount"
+tuition_out_of_state:
+  type: css
+  expr: "#tuition-out-of-state .amount"
+mandatory_fee:
+  type: css
+  expr: "#mandatory-fees .amount"

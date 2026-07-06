@@ -1,0 +1,12 @@
+# Sample config for a 2-year institution that only publishes in-district tuition.
+ipeds_unit_id: 100003
+name: Example Community College
+url: https://www.example-cc.edu/paying-for-college/tuition-rates
+academic_year: 2025
+respect_robots: true
+tuition_in_state:
+  type: css
+  expr: "table.rates td.in-district"
+mandatory_fee:
+  type: css
+  expr: "table.rates td.student-fee"
